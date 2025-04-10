@@ -13,6 +13,10 @@ public class ChessGame {
         return error;
     }
 
+    public List<String> getMoves(){
+        return moves;
+    }
+
     public boolean validate(){
         // TODO need here chessboard inst,
         //  need to detect move is valid or not

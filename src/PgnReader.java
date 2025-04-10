@@ -19,11 +19,9 @@ public class PgnReader {
 
         for (int i = 1; i < gameTexts.length; i++) {
             String gameText = "[Event " + gameTexts[i];
-            games.add(parseGame(gameText));
+            ChessGame game = parseGame(gameText);
+            games.add(game);
         }
-
-        //test
-        System.out.println(content);
 
         return games;
     }
@@ -31,23 +29,30 @@ public class PgnReader {
     private ChessGame parseGame(String gameText) {
         ChessGame game = new ChessGame();
 
-        int moveTextStart = gameText.indexOf("1.");
+        int moveTextStart = gameText.indexOf("1. ");
         if (moveTextStart == -1) {
+            System.out.println("something is wrong, couldnt find 1.");
             return game;
         }
 
         String moveText = gameText.substring(moveTextStart);
-
-        //test
-        System.out.println(moveText);
+        if(moveText.contains("1-0")){
+            moveText = moveText.replaceAll("1-0", "");
+        }else if (moveText.contains("0-1")){
+            moveText = moveText.replaceAll("0-1", "");
+        }else{
+            moveText = moveText.replaceAll("1/2-1/2", "");
+        }
 
         moveText = moveText.replaceAll("\\{[^}]*\\}", " ");
+
+        System.out.println(moveText.substring(0, moveText.length()));
 
         String[] tokens = moveText.split("\\s+");
         List<String> moves = new ArrayList<>();
 
         for (String token : tokens) {
-            if (token.isEmpty()) {
+            if (token == null || token.isEmpty()) {
                 continue;
             }
 
@@ -62,6 +67,7 @@ public class PgnReader {
         }
 
         game.setMoves(moves);
+        System.out.println("-----------------------------------------------");
         return game;
     }
 }

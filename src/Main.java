@@ -19,11 +19,10 @@ public class Main {
 
     public static void validateFile(File file){
         try{
-            System.out.println("Validating file: " + file.getName());
+            System.out.println("------------------ Validating file: " + file.getName() + " ------------------");
             PgnReader pgnReader = new PgnReader(file);
             pgnReader.readGames();
 
-            System.out.println(file);
         }catch (Exception ex){
             System.out.println("Error in processing file: " + ex.getMessage());
         }
