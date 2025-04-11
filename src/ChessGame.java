@@ -17,9 +17,50 @@ public class ChessGame {
         return moves;
     }
 
-    public boolean validate(){
-        // TODO need here chessboard inst,
-        //  need to detect move is valid or not
+    public boolean validate() {
+        ChessBoard board = new ChessBoard();
+        boolean isWhiteMove = true;
+
+        for (String moveText : moves) {
+            try {
+                int[] move = MoveParser.parseMove(moveText, board, isWhiteMove);
+
+                if (move == null) {
+                    error = "Could not parse move: " + moveText;
+                    return false;
+                }
+
+                int fromFile = move[0];
+                int fromRank = move[1];
+                int toFile = move[2];
+                int toRank = move[3];
+
+                ChessPiece piece = board.getPiece(fromFile, fromRank);
+
+                if (piece == null) {
+                    error = "No piece at starting position for move: " + moveText;
+                    return false;
+                }
+
+                if (piece.isWhite() != isWhiteMove) {
+                    error = "Wrong piece for move: " + moveText;
+                    return false;
+                }
+
+                if (!piece.isValidMove(fromFile, fromRank, toFile, toRank, board)) {
+                    error = "invalid move: " + moveText;
+                    return false;
+                }
+
+                board.makeMove(fromFile, fromRank, toFile, toRank);
+
+                isWhiteMove = !isWhiteMove;
+
+            } catch (Exception e) {
+                error = "Error  " + moveText + e.getMessage();
+                return false;
+            }
+        }
 
         return true;
     }
