@@ -16,6 +16,11 @@ public class ChessPiece {
     }
 
     public boolean isValidMove(int fromFile, int fromRank, int toFile, int toRank, ChessBoard chessBoard){
+        ChessPiece destPiece = chessBoard.getPiece(toFile, toRank);
+        if (destPiece != null && destPiece.isWhite() == isWhite){
+            return false;
+        }
+
         switch (type){
             case 'P': return isValidPawnMove(fromFile, fromRank, toFile, toRank, chessBoard);
             case 'N': return isValidKnightMove(fromFile, fromRank, toFile, toRank, chessBoard);
