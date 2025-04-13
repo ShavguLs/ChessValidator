@@ -44,7 +44,7 @@ public class ChessPiece {
     private boolean isValidQueenMove(int fromFile, int fromRank, int toFile, int toRank, ChessBoard chessBoard) {
         //queen = rook || bishop
 
-        return isValidRookMove(fromFile, fromRank, toFile, toRank, chessBoard) &&
+        return isValidRookMove(fromFile, fromRank, toFile, toRank, chessBoard) ||
                 isValidBishopMove(fromFile, fromRank, toFile, toRank, chessBoard);
     }
 
