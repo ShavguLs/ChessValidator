@@ -33,7 +33,6 @@ public class ChessPiece {
         }
     }
 
-    // TODO movements of pieces
     private boolean isValidKingMove(int fromFile, int fromRank, int toFile, int toRank, ChessBoard chessBoard) {
         int f = Math.abs(fromFile - toFile);
         int d = Math.abs(fromRank - toRank);

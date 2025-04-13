@@ -1,4 +1,5 @@
 import java.io.File;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -21,8 +22,32 @@ public class Main {
         try{
             System.out.println("------------------ Validating file: " + file.getName() + " ------------------");
             PgnReader pgnReader = new PgnReader(file);
-            pgnReader.readGames();
+            List<ChessGame> games = pgnReader.readGames();
 
+            System.out.println("Found " + games.size() + " games!");
+
+            int ok = 0;
+            int bad = 0;
+
+            for (int i = 0; i < games.size(); i++) {
+                ChessGame g = games.get(i);
+
+                boolean valid = g.validate();
+
+                if (valid){
+                    ok++;
+                    System.out.println("Game " + i + " is valid!");
+                }else {
+                    bad++;
+                    System.out.println("Game "+ i + " is valid!" + g.getError());
+                }
+                System.out.println("ln: " + i);
+            }
+
+            System.out.println("Done validating!");
+            System.out.println("Total: " + games.size() + " games");
+            System.out.println("Valid: " + ok);
+            System.out.println("Invalid: " + bad);
         }catch (Exception ex){
             System.out.println("Error in processing file: " + ex.getMessage());
         }
