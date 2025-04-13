@@ -1,6 +1,8 @@
 
 public class MoveParser {
     public static int[] parseMove(String move, ChessBoard board, boolean isWhiteMove){
+        System.out.println("Parsing move: " + move);
+        System.out.println("Board is null: " + (board == null));
         //small castling
         if (move.equals("O-O")){
             return isWhiteMove ? new int[]{4,0,6,0} : new int[]{4,7,6,7};
@@ -13,6 +15,10 @@ public class MoveParser {
 
         if (move.length() < 2) {
             return null;
+        }
+
+        if (move.endsWith("+") || move.endsWith("#")){
+            move = move.substring(0, move.length() - 1);
         }
 
         char destFile = move.charAt(move.length()- 2);

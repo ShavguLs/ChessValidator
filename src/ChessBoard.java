@@ -68,4 +68,38 @@ public class ChessBoard {
         System.out.println("  a b c d e f g h");
         System.out.println("  ---------------");
     }
+
+    public boolean isValidCastling(int fromFile, int fromRank, int toFile, int toRank, boolean isWhite) {
+        if (fromFile != 4 || fromRank != (isWhite ? 0 : 7)) {
+            return false;
+        }
+
+        if (toRank != fromRank || (toFile != 2 && toFile != 6)) {
+            return false;
+        }
+
+        // O-O-O
+        if (toFile == 2) {
+            for (int f = 1; f <= 3; f++) {
+                if (f != fromFile && getPiece(f, fromRank) != null) {
+                    return false;
+                }
+            }
+            ChessPiece rook = getPiece(0, fromRank);
+            return rook != null && rook.getType() == 'R' && rook.isWhite() == isWhite;
+        }
+
+        // O-O
+        if (toFile == 6) {
+            for (int f = 5; f <= 6; f++) {
+                if (getPiece(f, fromRank) != null) {
+                    return false;
+                }
+            }
+            ChessPiece rook = getPiece(7, fromRank);
+            return rook != null && rook.getType() == 'R' && rook.isWhite() == isWhite;
+        }
+
+        return false;
+    }
 }

@@ -19,6 +19,7 @@ public class ChessGame {
 
     public boolean validate() {
         ChessBoard board = new ChessBoard();
+        board.setupInitialPosition(); // todo
         boolean isWhiteMove = true;
 
         for (String moveText : moves) {

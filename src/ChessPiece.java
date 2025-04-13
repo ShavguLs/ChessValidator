@@ -17,7 +17,7 @@ public class ChessPiece {
     }
 
     public boolean isValidMove(int fromFile, int fromRank, int toFile, int toRank, ChessBoard chessBoard){
-        ChessPiece targetPiece = board.getPiece(toFile, toRank);
+        ChessPiece targetPiece = chessBoard.getPiece(toFile, toRank); // !!!!!!!!!!!!
         if (targetPiece != null && targetPiece.isWhite() == this.isWhite){
             return false;
         }
@@ -34,10 +34,15 @@ public class ChessPiece {
     }
 
     private boolean isValidKingMove(int fromFile, int fromRank, int toFile, int toRank, ChessBoard chessBoard) {
-        int f = Math.abs(fromFile - toFile);
-        int d = Math.abs(fromRank - toRank);
+        int fileDiff = Math.abs(fromFile - toFile);
+        int rankDiff = Math.abs(fromRank - toRank);
 
-        return f <= 1 && d <= 1;
+        //castling check
+        if (rankDiff == 0 && fileDiff == 2){
+            return chessBoard.isValidCastling(fromFile, fromRank, toFile, toRank, isWhite);
+        }
+
+        return fileDiff <= 1 && rankDiff <= 1;
     }
 
     private boolean isValidQueenMove(int fromFile, int fromRank, int toFile, int toRank, ChessBoard chessBoard) {
@@ -58,7 +63,7 @@ public class ChessPiece {
             int end = Math.max(fromFile, toFile);
 
             for (int f = start; f < end; f++) {
-                if (board.getPiece(f, fromRank) != null){
+                if (chessBoard.getPiece(f, fromRank) != null){
                     return false;
                 }
             }
@@ -67,7 +72,7 @@ public class ChessPiece {
             int end = Math.max(fromRank, toRank);
 
             for (int r = start; r < end; r++) {
-                if (board.getPiece(fromFile, r) != null){
+                if (chessBoard.getPiece(fromFile, r) != null){
                     return false;
                 }
             }
@@ -78,7 +83,7 @@ public class ChessPiece {
 
     private boolean isValidBishopMove(int fromFile, int fromRank, int toFile, int toRank, ChessBoard chessBoard) {
         int df = Math.abs(fromFile - toFile);
-        int dr = Math.abs(fromFile - toRank);
+        int dr = Math.abs(fromRank - toRank);
 
         if (df != dr) return false;
 
@@ -89,7 +94,7 @@ public class ChessPiece {
         int r = fromRank + rStep;
 
         while (f != toFile){
-            if (board.getPiece(f, r) != null){
+            if (chessBoard.getPiece(f, r) != null){
                 return false;
             }
             f += fStep;

@@ -36,10 +36,10 @@ public class Main {
 
                 if (valid){
                     ok++;
-                    System.out.println("Game " + i + " is valid!");
+                    System.out.println("Game " + (i+1) + " is valid!");
                 }else {
                     bad++;
-                    System.out.println("Game "+ i + " is valid!" + g.getError());
+                    System.out.println("Game "+ (i+1) + " is invalid!" + g.getError());
                 }
                 System.out.println("ln: " + i);
             }
