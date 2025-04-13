@@ -39,9 +39,9 @@ public class Main {
                     System.out.println("Game " + (i+1) + " is valid!");
                 }else {
                     bad++;
-                    System.out.println("Game "+ (i+1) + " is invalid!" + g.getError());
+                    System.out.println("Game " + (i+1) + " is invalid!" + g.getError());
                 }
-                System.out.println("ln: " + i);
+//                System.out.println("ln: " + i);
             }
 
             System.out.println("Done validating!");

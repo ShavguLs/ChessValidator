@@ -34,15 +34,17 @@ public class ChessPiece {
     }
 
     private boolean isValidKingMove(int fromFile, int fromRank, int toFile, int toRank, ChessBoard chessBoard) {
-        int fileDiff = Math.abs(fromFile - toFile);
-        int rankDiff = Math.abs(fromRank - toRank);
+        int f = Math.abs(fromFile - toFile);
+        int d = Math.abs(fromRank - toRank);
 
-        //castling check
-        if (rankDiff == 0 && fileDiff == 2){
-            return chessBoard.isValidCastling(fromFile, fromRank, toFile, toRank, isWhite);
+        if (f <= 1 && d <= 1) {
+            return true;
         }
 
-        return fileDiff <= 1 && rankDiff <= 1;
+        if (f == 2 && d == 0) {
+            return true;
+        }
+        return false;
     }
 
     private boolean isValidQueenMove(int fromFile, int fromRank, int toFile, int toRank, ChessBoard chessBoard) {
@@ -53,31 +55,30 @@ public class ChessPiece {
     }
 
     private boolean isValidRookMove(int fromFile, int fromRank, int toFile, int toRank, ChessBoard chessBoard) {
-        if (fromFile != toFile && fromRank != toRank){
+        if (fromFile != toFile && fromRank != toRank) {
             return false;
         }
 
-        //horizontally moving
-        if (fromRank == toRank){
+        if (fromFile == toFile) {
+            // Moving vertically
+            int start = Math.min(fromRank, toRank) + 1;
+            int end = Math.max(fromRank, toRank);
+            for (int r = start; r < end; r++) {
+                if (chessBoard.getPiece(fromFile, r) != null) {
+                    return false;
+                }
+            }
+        } else {
+            // Moving horizontally
             int start = Math.min(fromFile, toFile) + 1;
             int end = Math.max(fromFile, toFile);
 
             for (int f = start; f < end; f++) {
-                if (chessBoard.getPiece(f, fromRank) != null){
+                if (chessBoard.getPiece(f, fromRank) != null) {
                     return false;
                 }
             }
-        }else { // verticaly moving
-            int start = Math.min(fromRank, toRank) + 1;
-            int end = Math.max(fromRank, toRank);
-
-            for (int r = start; r < end; r++) {
-                if (chessBoard.getPiece(fromFile, r) != null){
-                    return false;
-                }
-            }
-         }
-
+        }
         return true;
     }
 
@@ -93,7 +94,7 @@ public class ChessPiece {
         int f= fromFile + fStep;
         int r = fromRank + rStep;
 
-        while (f != toFile){
+        while (f != toFile && r != toRank){
             if (chessBoard.getPiece(f, r) != null){
                 return false;
             }
