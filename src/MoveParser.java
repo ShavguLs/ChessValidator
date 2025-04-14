@@ -10,6 +10,15 @@ public class MoveParser {
             return isWhiteMove ? new int[]{4,0,2,0} : new int[]{4,7,2,7};
         }
 
+        char promotionPiece = ' ';
+        if (move.contains("=")){
+            int equalPos = move.indexOf('=');
+            if (equalPos > 0 && equalPos < move.length() - 1){
+                promotionPiece = move.charAt(equalPos + 1);
+                move = move.substring(0, equalPos);
+            }
+        }
+
         if (move.endsWith("+") || move.endsWith("#")){
             move = move.substring(0, move.length() - 1);
         }
@@ -47,6 +56,12 @@ public class MoveParser {
                 srcFile = hint - 'a';
             } else if (hint >= '1' && hint <= '8'){
                 srcRank = hint - '1';
+            }
+        }
+
+        if (pieceType == 'P' && isCapture && srcFile == -1){
+            if (move.length() > 2 && move.charAt(0) >= 'a' && move.charAt(0) <= 'h'){
+                srcFile = move.charAt(0) - 'a';
             }
         }
 

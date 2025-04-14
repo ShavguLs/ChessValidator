@@ -46,7 +46,7 @@ public class PgnReader {
 
         moveText = moveText.replaceAll("\\{[^}]*\\}", " ");
 
-        System.out.println(moveText.substring(0, moveText.length()));
+//        System.out.println(moveText.substring(0, moveText.length()));
 
         String[] tokens = moveText.split("\\s+");
         List<String> moves = new ArrayList<>();
@@ -67,7 +67,6 @@ public class PgnReader {
         }
 
         game.setMoves(moves);
-        System.out.println("-----------------------------------------------");
         return game;
     }
 }

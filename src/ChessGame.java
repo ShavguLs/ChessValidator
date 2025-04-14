@@ -22,6 +22,7 @@ public class ChessGame {
         board.setupInitialPosition(); // todo
         boolean isWhiteMove = true;
         boolean trustMoves = true;
+//        boolean lenientMode = true;
 
         for (String moveText : moves) {
             try {
@@ -49,6 +50,7 @@ public class ChessGame {
                     return false;
                 }
 
+                // skip detailed valid
                 if (!trustMoves && !piece.isValidMove(fromFile, fromRank, toFile, toRank, board)){
                     error = "invalid move: " + moveText;
                     return false;

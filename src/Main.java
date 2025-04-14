@@ -24,8 +24,6 @@ public class Main {
             PgnReader pgnReader = new PgnReader(file);
             List<ChessGame> games = pgnReader.readGames();
 
-            System.out.println("Found " + games.size() + " games!");
-
             int ok = 0;
             int bad = 0;
 
@@ -36,18 +34,21 @@ public class Main {
 
                 if (valid){
                     ok++;
-                    System.out.println("Game " + (i+1) + " is valid!");
+//                    System.out.println("Game " + (i+1) + " is valid!");
                 }else {
                     bad++;
-                    System.out.println("Game " + (i+1) + " is invalid!" + g.getError());
+                    System.out.println("Game " + (i+1) + " is invalid! [" + g.getError() + "]");
                 }
 //                System.out.println("ln: " + i);
             }
 
-            System.out.println("Done validating!");
+            System.out.println("------------------ Done validating! ------------------");
+
+            System.out.println("------------ RESULT ------------");
             System.out.println("Total: " + games.size() + " games");
-            System.out.println("Valid: " + ok);
-            System.out.println("Invalid: " + bad);
+            System.out.println("Valid: " + ok + " games");
+            System.out.println("Invalid: " + bad + " games");
+            System.out.println("------------ RESULT ------------");
         }catch (Exception ex){
             System.out.println("Error in processing file: " + ex.getMessage());
         }
