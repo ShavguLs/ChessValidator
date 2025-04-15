@@ -1,5 +1,7 @@
+// ChessBoard.java - Fixed
 public class ChessBoard {
     private ChessPiece[][] board = new ChessPiece[8][8];
+    private int[] enPassantSquare = null;
 
     public ChessBoard(){
         setupInitialPosition();
@@ -41,65 +43,24 @@ public class ChessBoard {
     }
 
     public void makeMove(int fromFile, int fromRank, int toFile, int toRank){
+        ChessPiece movingPiece = board[fromFile][fromRank];
+        if (movingPiece.getType() == 'P' && fromFile != toFile && board[toFile][toRank] == null) {
+            board[toFile][fromRank] = null;
+        }
+        if (movingPiece.getType() == 'P' && Math.abs(fromRank - toRank) == 2) {
+            enPassantSquare = new int[]{fromFile, (fromRank + toRank) / 2};
+        } else {
+            enPassantSquare = null;
+        }
+        if (movingPiece.getType() == 'K' && Math.abs(fromFile - toFile) == 2) {
+            int rookFromFile = (toFile > fromFile) ? 7 : 0;
+            int rookToFile = (toFile > fromFile) ? 5 : 3;
+
+            board[rookToFile][fromRank] = board[rookFromFile][fromRank];
+            board[rookFromFile][fromRank] = null;
+        }
+
         board[toFile][toRank] = board[fromFile][fromRank];
         board[fromFile][fromRank] = null;
     }
-
-//    public void printBoard(){
-//        System.out.println("  a b c d e f g h");
-//        System.out.println("  ---------------");
-//        for (int rank = 7; rank >= 0; rank--) {
-//            System.out.println((rank + 1) + "|");
-//            for (int file = 0; file < 8; file++) {
-//                ChessPiece piece = board[file][rank];
-//                if (piece == null){
-//                    System.out.println(" ");
-//                }else {
-//                    char symbol = piece.getType();
-//                    if (!piece.isWhite()){
-//                        symbol = Character.toLowerCase(symbol);
-//                    }
-//                    System.out.println(symbol);
-//                }
-//                System.out.println(" ");
-//            }
-//            System.out.println("|" + (rank + 1));
-//        }
-//        System.out.println("  a b c d e f g h");
-//        System.out.println("  ---------------");
-//    }
-
-//    public boolean isValidCastling(int fromFile, int fromRank, int toFile, int toRank, boolean isWhite) {
-//        if (fromFile != 4 || fromRank != (isWhite ? 0 : 7)) {
-//            return false;
-//        }
-//
-//        if (toRank != fromRank || (toFile != 2 && toFile != 6)) {
-//            return false;
-//        }
-//
-//        // O-O-O
-//        if (toFile == 2) {
-//            for (int f = 1; f <= 3; f++) {
-//                if (f != fromFile && getPiece(f, fromRank) != null) {
-//                    return false;
-//                }
-//            }
-//            ChessPiece rook = getPiece(0, fromRank);
-//            return rook != null && rook.getType() == 'R' && rook.isWhite() == isWhite;
-//        }
-//
-//        // O-O
-//        if (toFile == 6) {
-//            for (int f = 5; f <= 6; f++) {
-//                if (getPiece(f, fromRank) != null) {
-//                    return false;
-//                }
-//            }
-//            ChessPiece rook = getPiece(7, fromRank);
-//            return rook != null && rook.getType() == 'R' && rook.isWhite() == isWhite;
-//        }
-//
-//        return false;
-//    }
 }
