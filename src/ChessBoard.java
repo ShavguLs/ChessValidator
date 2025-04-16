@@ -47,6 +47,7 @@ public class ChessBoard {
         if (movingPiece.getType() == 'P' && fromFile != toFile && board[toFile][toRank] == null) {
             board[toFile][fromRank] = null;
         }
+
         if (movingPiece.getType() == 'P' && Math.abs(fromRank - toRank) == 2) {
             enPassantSquare = new int[]{fromFile, (fromRank + toRank) / 2};
         } else {
@@ -62,5 +63,43 @@ public class ChessBoard {
 
         board[toFile][toRank] = board[fromFile][fromRank];
         board[fromFile][fromRank] = null;
+    }
+
+    public int[] getEnPassantSquare(){
+        return enPassantSquare;
+    }
+
+    public boolean isValidCastling(int fromFile, int fromRank, int toFile, int toRank, boolean isWhite){
+        if (fromFile != 4 || fromRank != (isWhite ? 0 : 7)){
+            return false;
+        }
+
+        if (toRank != fromRank || (toFile != 2 && toFile != 6)){
+            return false;
+        }
+
+        // o-o-o
+        if (toFile == 2){
+            for (int f = 1; f <= 3; f++) {
+                if (f != fromFile && getPiece(f, fromRank) != null){
+                    return false;
+                }
+            }
+
+            ChessPiece rook = getPiece(0, fromRank);
+            return rook != null && rook.getType() == 'R' && rook.isWhite() == isWhite;
+        }
+
+        // o-o
+        if (toFile == 6){
+            for (int f = 5; f < 6; f++) {
+                if (getPiece(f, fromRank) != null){
+                    return false;
+                }
+            }
+            ChessPiece rook = getPiece(7, fromRank);
+            return rook != null && rook.getType() == 'R' && rook.isWhite() == isWhite;
+        }
+        return false;
     }
 }

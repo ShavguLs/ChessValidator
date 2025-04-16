@@ -38,7 +38,7 @@ public class MoveParser {
         int dr = destRank - '1';
 
         char pieceType = 'P';
-        if (Character.isUpperCase(move.charAt(0))){
+        if (Character.isUpperCase(move.charAt(0)) && "KQRBNP".indexOf(move.charAt(0)) >= 0){
             pieceType = move.charAt(0);
             move = move.substring(1);
         }
@@ -51,17 +51,20 @@ public class MoveParser {
         int srcRank = -1;
 
         if (move.length() > 2){
-            char hint = move.charAt(0);
-            if (hint >= 'a' && hint <= 'h'){
-                srcFile = hint - 'a';
-            } else if (hint >= '1' && hint <= '8'){
-                srcRank = hint - '1';
+            for (int i = 0; i < move.length() - 2; i++) {
+                char hint = move.charAt(i);
+                if (hint >= 'a' && hint <= 'h'){
+                    srcFile = hint - 'a';
+                }else if (hint >= '1' && hint <= '8'){
+                    srcRank = hint - '1';
+                }
             }
         }
 
-        if (pieceType == 'P' && isCapture && srcFile == -1){
-            if (move.length() > 2 && move.charAt(0) >= 'a' && move.charAt(0) <= 'h'){
-                srcFile = move.charAt(0) - 'a';
+        if (pieceType == 'P' && isCapture && srcFile == -1 && move.length() > 2){
+            char hint = move.charAt(0);
+            if (hint >= 'a' && hint <= 'h'){
+                srcFile = hint - 'a';
             }
         }
 

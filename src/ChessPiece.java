@@ -1,7 +1,6 @@
 public class ChessPiece {
     private char type;
     private boolean isWhite;
-    private ChessBoard board;
 
     public ChessPiece(char type, boolean isWhite){
         this.type = type;
@@ -17,7 +16,7 @@ public class ChessPiece {
     }
 
     public boolean isValidMove(int fromFile, int fromRank, int toFile, int toRank, ChessBoard chessBoard){
-        ChessPiece targetPiece = chessBoard.getPiece(toFile, toRank); // !!!!!!!!!!!!
+        ChessPiece targetPiece = chessBoard.getPiece(toFile, toRank);
         if (targetPiece != null && targetPiece.isWhite() == this.isWhite){
             return false;
         }
@@ -42,14 +41,12 @@ public class ChessPiece {
         }
 
         if (f == 2 && d == 0) {
-            return true;
+            return chessBoard.isValidCastling(fromFile, fromRank, toFile, toRank, isWhite);
         }
         return false;
     }
 
     private boolean isValidQueenMove(int fromFile, int fromRank, int toFile, int toRank, ChessBoard chessBoard) {
-        //queen = rook || bishop
-
         return isValidRookMove(fromFile, fromRank, toFile, toRank, chessBoard) ||
                 isValidBishopMove(fromFile, fromRank, toFile, toRank, chessBoard);
     }
@@ -94,7 +91,7 @@ public class ChessPiece {
         int f= fromFile + fStep;
         int r = fromRank + rStep;
 
-        while (f != toFile && r != toRank){
+        while (f != toFile){
             if (chessBoard.getPiece(f, r) != null){
                 return false;
             }
@@ -128,10 +125,16 @@ public class ChessPiece {
             }
         }
 
-        if (isCapture && Math.abs(fromFile - toFile) == 1 && toRank == fromRank + forward){
-            return true;
-        }
+        if (Math.abs(fromFile - toFile) == 1 && toRank == fromRank + forward){
+            if (isCapture){
+                return true;
+            }
 
+            int[] enPassantSquare = chessBoard.getEnPassantSquare();
+            if (enPassantSquare != null && toFile == enPassantSquare[0] && toRank == enPassantSquare[1]){
+                return true;
+            }
+        }
         return false;
     }
 }

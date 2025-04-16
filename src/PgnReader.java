@@ -36,13 +36,11 @@ public class PgnReader {
         }
 
         String moveText = gameText.substring(moveTextStart);
-        if(moveText.contains("1-0")){
-            moveText = moveText.replaceAll("1-0", "");
-        }else if (moveText.contains("0-1")){
-            moveText = moveText.replaceAll("0-1", "");
-        }else{
-            moveText = moveText.replaceAll("1/2-1/2", "");
-        }
+
+        moveText = moveText.replaceAll("1-0", "");
+        moveText = moveText.replaceAll("0-1", "");
+        moveText = moveText.replaceAll("1/2-1/2", "");
+        moveText = moveText.replaceAll("\\*", "");
 
         moveText = moveText.replaceAll("\\{[^}]*\\}", " ");
 
