@@ -88,7 +88,7 @@ public class ChessPiece {
         int fStep = (toFile > fromFile) ? 1 : -1;
         int rStep = (toRank > fromRank) ? 1 : -1;
 
-        int f= fromFile + fStep;
+        int f = fromFile + fStep;
         int r = fromRank + rStep;
 
         while (f != toFile){
@@ -105,7 +105,6 @@ public class ChessPiece {
     private boolean isValidKnightMove(int fromFile, int fromRank, int toFile, int toRank, ChessBoard chessBoard) {
         int df = Math.abs(fromFile - toFile);
         int dr = Math.abs(fromRank - toRank);
-
         return (df == 2 && dr == 1) || (df == 1 && dr == 2);
     }
 
@@ -118,8 +117,8 @@ public class ChessPiece {
             if (toRank == fromRank + forward){
                 return true;
             }
-
-            if ((isWhite && fromRank == 1 && toRank == 3) || ((!isWhite && fromRank == 6 && toRank == 4))){
+            if ((isWhite && fromRank == 1 && toRank == 3) ||
+                    (!isWhite && fromRank == 6 && toRank == 4)){
                 int midRank = fromRank + forward;
                 return chessBoard.getPiece(fromFile, midRank) == null;
             }
