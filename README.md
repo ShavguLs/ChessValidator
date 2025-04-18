@@ -1,36 +1,62 @@
 # Chess Game Validator
 
-This project is a Java application that reads and validates chess games in PGN format. The validator checks both the syntax of the chess notation and the legality of each move according to standard chess rules.
+This project checks if chess games written in PGN format are valid or not. It first checks if the moves are written correctly, then checks if all moves follow chess rules.
 
-## Project Description
+## How It Works
 
-The Chess Game Validator parses PGN files containing one or more chess games and checks each game for validity. The validation happens in two phases:
+The program:
+1. Lets you choose a PGN file using a file dialog
+2. Reads all the chess games from the file
+3. Checks each game in two steps:
+    - First makes sure the notation is correct (no typos or wrong formats)
+    - Then replays the game to make sure all moves are legal
 
-1. **Parsing Phase**: Checks for syntax errors in the move notation.
-2. **Game Replay Phase**: Simulates the game move by move to ensure all moves are legal according to chess rules.
-
-The program handles special chess moves including:
-- Castling (both kingside and queenside)
+It can handle special chess moves like:
+- Castling (O-O and O-O-O)
 - En passant captures
-- Pawn promotions
-- Check and checkmate notation
+- Pawn promotions (like e8=Q)
+- Check (+) and checkmate (#) markers
 
-## How to Run the Program
+## How to Run It
 
-### Prerequisites
-- A PGN file containing chess games
+1. Make sure you have Java installed
+2. Compile the code:
+   ```
+   javac *.java
+   ```
+3. Run the program:
+   ```
+   java Main
+   ```
+4. A window will open where you can select your PGN file
+5. Results will be shown in the console
 
-### Compilation
-Compile all Java files:
+## Sample Output
+
+When you run the program with a valid chess game file, you'll see something like this:
+
 ```
-javac *.java
+===============================================
+Validating file: sample.pgn
+===============================================
+===============================================
+VALIDATION SUMMARY
+===============================================
+Total games: 10
+Valid games: 8
+Invalid games: 2
+  - Games with syntax errors: 1
+  - Games with illegal moves: 1
+===============================================
 ```
 
-### Execution
-Run the program with a PGN file as argument:
-```
-java Main 
-```
+## Files Included
 
+- `Main.java` - The main program with file selection
+- `ChessBoard.java` - Represents the chess board
+- `ChessPiece.java` - Contains logic for how pieces move
+- `ChessGame.java` - Validates games
+- `MoveParser.java` - Converts chess notation to moves
+- `PgnReader.java` - Reads PGN files
 
-![image](https://github.com/user-attachments/assets/3bfe85d2-beba-43c3-be4d-508f3bb73fd4)
+![File chooser dialog](https://github.com/user-attachments/assets/3bfe85d2-beba-43c3-be4d-508f3bb73fd4)
