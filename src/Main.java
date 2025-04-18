@@ -3,54 +3,73 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-//        if (args.length != 1){
-//            System.out.println("java main <path>");
+//        if (args.length != 1) {
+//            System.out.println("Usage: java Main <pgn_file_path>");
+//            System.out.println("Example: java Main games.pgn");
 //            return;
 //        }
 
-        String path = "C:/Users/shadowInstance/Downloads/WorldCup2009.pgn";
+        String path = "C://Users//shadowInstance//Downloads/WorldCup2009.pgn";
         File input = new File(path);
 
-        if(input.isFile() && input.getName().endsWith(".pgn")){
+        if (input.isFile() && input.getName().endsWith(".pgn")) {
             validateFile(input);
-        }else{
-            System.out.println("WE HAVE PROBLEM: Input must be a PGN file!!!");
+        } else {
+            System.out.println("Error: Input must be a PGN file!");
+            System.out.println("Please specify a valid .pgn file path.");
         }
     }
-
-    public static void validateFile(File file){
-        try{
-            System.out.println("------------------ Validating file: " + file.getName() + " ------------------");
+    public static void validateFile(File file) {
+        try {
+            System.out.println("===============================================");
+            System.out.println("Validating file: " + file.getName());
+            System.out.println("===============================================");
             PgnReader pgnReader = new PgnReader(file);
             List<ChessGame> games = pgnReader.readGames();
 
-            int ok = 0;
-            int bad = 0;
+            int validGames = 0;
+            int invalidGames = 0;
+            int syntaxErrors = 0;
+            int moveErrors = 0;
 
             for (int i = 0; i < games.size(); i++) {
-                ChessGame g = games.get(i);
+                ChessGame game = games.get(i);
+//                System.out.print("Game " + (i+1) + ": ");
 
-                boolean valid = g.validate();
-
-                if (valid){
-                    ok++;
-//                    System.out.println("Game " + (i+1) + " is valid!");
-                }else {
-                    bad++;
-                    System.out.println("Game " + (i+1) + " is invalid! [" + g.getError() + "]");
+                boolean validSyntax = game.validateSyntax();
+                if (!validSyntax) {
+                    System.out.println("INVALID - Syntax errors");
+                    for (String error : game.getParseErrors()) {
+                        System.out.println("  - " + error);
+                    }
+                    invalidGames++;
+                    syntaxErrors++;
+                    continue;
                 }
-//                System.out.println("ln: " + i);
+
+                boolean validMoves = game.validate();
+                if (validMoves) {
+//                    System.out.println("VALID");
+                    validGames++;
+                } else {
+                    System.out.println("INVALID - " + game.getError());
+                    invalidGames++;
+                    moveErrors++;
+                }
             }
 
-            System.out.println("------------------ Done validating! ------------------");
-
-            System.out.println("------------ RESULT ------------");
-            System.out.println("Total: " + games.size() + " games");
-            System.out.println("Valid: " + ok + " games");
-            System.out.println("Invalid: " + bad + " games");
-            System.out.println("------------ RESULT ------------");
-        }catch (Exception ex){
-            System.out.println("Error in processing file: " + ex.getMessage());
+            System.out.println("===============================================");
+            System.out.println("VALIDATION SUMMARY");
+            System.out.println("===============================================");
+            System.out.println("Total games: " + games.size());
+            System.out.println("Valid games: " + validGames);
+            System.out.println("Invalid games: " + invalidGames);
+            System.out.println("  - Games with syntax errors: " + syntaxErrors);
+            System.out.println("  - Games with illegal moves: " + moveErrors);
+            System.out.println("===============================================");
+        } catch (Exception ex) {
+            System.out.println("Error processing file: " + ex.getMessage());
+            ex.printStackTrace();
         }
     }
 }

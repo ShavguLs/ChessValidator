@@ -1,4 +1,3 @@
-// ChessBoard.java - Fixed
 public class ChessBoard {
     private ChessPiece[][] board = new ChessPiece[8][8];
     private int[] enPassantSquare = null;
@@ -69,36 +68,116 @@ public class ChessBoard {
         return enPassantSquare;
     }
 
-    public boolean isValidCastling(int fromFile, int fromRank, int toFile, int toRank, boolean isWhite){
-        if (fromFile != 4 || fromRank != (isWhite ? 0 : 7)){
+    public boolean isValidCastling(int fromFile, int fromRank, int toFile, int toRank, boolean isWhite) {
+        if (fromFile != 4 || fromRank != (isWhite ? 0 : 7)) {
             return false;
         }
-
-        if (toRank != fromRank || (toFile != 2 && toFile != 6)){
+        if (toRank != fromRank || (toFile != 2 && toFile != 6)) {
             return false;
         }
-
-        // o-o-o
-        if (toFile == 2){
-            for (int f = 1; f <= 3; f++) {
-                if (f != fromFile && getPiece(f, fromRank) != null){
+        if (isSquareUnderAttack(fromFile, fromRank, !isWhite)) {
+            return false;
+        }
+        int step = (toFile > fromFile) ? 1 : -1;
+        int midFile = fromFile + step;
+        if (isSquareUnderAttack(midFile, fromRank, !isWhite)) {
+            return false;
+        }
+        if (toFile == 2) { //  (O-O-O)
+            for (int f = 1; f < 4; f++) {
+                if (f != fromFile && getPiece(f, fromRank) != null) {
                     return false;
                 }
             }
-
             ChessPiece rook = getPiece(0, fromRank);
             return rook != null && rook.getType() == 'R' && rook.isWhite() == isWhite;
-        }
-
-        // o-o
-        if (toFile == 6){
-            for (int f = 5; f < 6; f++) {
-                if (getPiece(f, fromRank) != null){
+        } else { // (O-O)
+            for (int f = 5; f < 7; f++) {
+                if (getPiece(f, fromRank) != null) {
                     return false;
                 }
             }
             ChessPiece rook = getPiece(7, fromRank);
             return rook != null && rook.getType() == 'R' && rook.isWhite() == isWhite;
+        }
+    }
+
+    public boolean isSquareUnderAttack(int file, int rank, boolean byWhite) {
+        int pawnDirection = byWhite ? 1 : -1;
+        if (file > 0) {
+            ChessPiece attacker = getPiece(file - 1, rank - pawnDirection);
+            if (attacker != null && attacker.getType() == 'P' && attacker.isWhite() == byWhite) {
+                return true;
+            }
+        }
+        if (file < 7) {
+            ChessPiece attacker = getPiece(file + 1, rank - pawnDirection);
+            if (attacker != null && attacker.getType() == 'P' && attacker.isWhite() == byWhite) {
+                return true;
+            }
+        }
+        int[][] knightMoves = {
+                {-2, -1}, {-2, 1}, {-1, -2}, {-1, 2},
+                {1, -2}, {1, 2}, {2, -1}, {2, 1}
+        };
+        for (int[] move : knightMoves) {
+            int f = file + move[0];
+            int r = rank + move[1];
+            if (f >= 0 && f < 8 && r >= 0 && r < 8) {
+                ChessPiece attacker = getPiece(f, r);
+                if (attacker != null && attacker.getType() == 'N' && attacker.isWhite() == byWhite) {
+                    return true;
+                }
+            }
+        }
+        int[][] kingMoves = {
+                {-1, -1}, {-1, 0}, {-1, 1}, {0, -1},
+                {0, 1}, {1, -1}, {1, 0}, {1, 1}
+        };
+        for (int[] move : kingMoves) {
+            int f = file + move[0];
+            int r = rank + move[1];
+            if (f >= 0 && f < 8 && r >= 0 && r < 8) {
+                ChessPiece attacker = getPiece(f, r);
+                if (attacker != null && attacker.getType() == 'K' && attacker.isWhite() == byWhite) {
+                    return true;
+                }
+            }
+        }
+        int[][] directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+        for (int[] dir : directions) {
+            int f = file + dir[0];
+            int r = rank + dir[1];
+            while (f >= 0 && f < 8 && r >= 0 && r < 8) {
+                ChessPiece attacker = getPiece(f, r);
+                if (attacker != null) {
+                    if (attacker.isWhite() == byWhite &&
+                            (attacker.getType() == 'R' || attacker.getType() == 'Q')) {
+                        return true;
+                    }
+                    break;
+                }
+                f += dir[0];
+                r += dir[1];
+            }
+        }
+
+        int[][] diagonals = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
+        for (int[] dir : diagonals) {
+            int f = file + dir[0];
+            int r = rank + dir[1];
+            while (f >= 0 && f < 8 && r >= 0 && r < 8) {
+                ChessPiece attacker = getPiece(f, r);
+                if (attacker != null) {
+                    if (attacker.isWhite() == byWhite &&
+                            (attacker.getType() == 'B' || attacker.getType() == 'Q')) {
+                        return true;
+                    }
+                    break;
+                }
+                f += dir[0];
+                r += dir[1];
+            }
         }
         return false;
     }
