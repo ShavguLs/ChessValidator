@@ -8,7 +8,7 @@ public class Main {
 //            return;
 //        }
 
-        String path = "C:/Users/shadowInstance/Downloads/Tbilisi2015.pgn";
+        String path = "C:/Users/shadowInstance/Downloads/WorldCup2009.pgn";
         File input = new File(path);
 
         if(input.isFile() && input.getName().endsWith(".pgn")){
