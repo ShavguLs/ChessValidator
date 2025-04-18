@@ -3,6 +3,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PgnReader {
     private File file;
@@ -29,12 +31,19 @@ public class PgnReader {
     private ChessGame parseGame(String gameText) {
         ChessGame game = new ChessGame();
 
-        int moveTextStart = gameText.indexOf("1. ");
-        if (moveTextStart == -1) {
-            System.out.println("something is wrong, couldnt find 1.");
-            return game;
+        Pattern moveStartPattern = Pattern.compile("(^|\\s)1\\s*\\.");
+        Matcher matcher = moveStartPattern.matcher(gameText);
+
+        if (!matcher.find()) {
+            Pattern anyMovePattern = Pattern.compile("(^|\\s)\\d+\\s*\\.");
+            matcher = anyMovePattern.matcher(gameText);
+
+            if (!matcher.find()) {
+                return game;
+            }
         }
 
+        int moveTextStart = matcher.start();
         String moveText = gameText.substring(moveTextStart);
 
         moveText = moveText.replaceAll("1-0", "");
@@ -45,6 +54,8 @@ public class PgnReader {
         moveText = moveText.replaceAll("\\{[^}]*\\}", " ");
 
 //        System.out.println(moveText.substring(0, moveText.length()));
+
+        moveText = moveText.replaceAll("\\{[^}]*\\}", " ");
 
         String[] tokens = moveText.split("\\s+");
         List<String> moves = new ArrayList<>();
