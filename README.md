@@ -29,7 +29,7 @@ javac *.java
 ### Execution
 Run the program with a PGN file as argument:
 ```
-java Main path/to/your/file.pgn
+java Main 
 ```
 
 

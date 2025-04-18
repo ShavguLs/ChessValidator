@@ -1,29 +1,35 @@
 import java.io.File;
 import java.util.List;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.SwingUtilities;
 
 public class Main {
     public static void main(String[] args) {
-//        if (args.length != 1) {
-//            System.out.println("Usage: java Main <pgn_file_path>");
-//            System.out.println("Example: java Main games.pgn");
-//            return;
-//        }
+        SwingUtilities.invokeLater(() -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Select PGN File");
 
-        String path = "C://Users//shadowInstance//Downloads/WorldCup2009.pgn";
-        File input = new File(path);
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("Chess PGN Files (*.pgn)", "pgn");
+            fileChooser.setFileFilter(filter);
 
-        if (input.isFile() && input.getName().endsWith(".pgn")) {
-            validateFile(input);
-        } else {
-            System.out.println("Error: Input must be a PGN file!");
-            System.out.println("Please specify a valid .pgn file path.");
-        }
+            int result = fileChooser.showOpenDialog(null);
+
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+                validateFile(selectedFile);
+            } else {
+                System.out.println("No file selected. Exiting.");
+            }
+        });
     }
+
     public static void validateFile(File file) {
         try {
             System.out.println("===============================================");
             System.out.println("Validating file: " + file.getName());
             System.out.println("===============================================");
+
             PgnReader pgnReader = new PgnReader(file);
             List<ChessGame> games = pgnReader.readGames();
 
@@ -34,7 +40,6 @@ public class Main {
 
             for (int i = 0; i < games.size(); i++) {
                 ChessGame game = games.get(i);
-//                System.out.print("Game " + (i+1) + ": ");
 
                 boolean validSyntax = game.validateSyntax();
                 if (!validSyntax) {
@@ -49,7 +54,6 @@ public class Main {
 
                 boolean validMoves = game.validate();
                 if (validMoves) {
-//                    System.out.println("VALID");
                     validGames++;
                 } else {
                     System.out.println("INVALID - " + game.getError());
