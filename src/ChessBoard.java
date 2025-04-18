@@ -1,3 +1,7 @@
+/* This class shows the chess board with all the pieces on it
+It keeps track of where all the pieces are and handles special moves
+I made functions to check if moves are allowed and to move pieces around */
+
 public class ChessBoard {
     private ChessPiece[][] board = new ChessPiece[8][8];
     private int[] enPassantSquare = null;

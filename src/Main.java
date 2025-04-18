@@ -4,6 +4,11 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.SwingUtilities;
 
+/* This is the starting point of the program
+It shows a window where you can pick a PGN file
+Then it checks all the games in that file
+At the end it prints a summary of valid and invalid games */
+
 public class Main {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {

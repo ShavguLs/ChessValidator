@@ -1,6 +1,11 @@
 import java.util.ArrayList;
 import java.util.List;
 
+/* This class handles a whole chess game with all its moves
+It checks if the moves written in the file are correct
+First it checks the writing style, then it checks if the moves follow chess rules
+It also keeps track of errors it finds in the game */
+
 public class ChessGame {
     private List<String> moves = new ArrayList<>();
     private String error;

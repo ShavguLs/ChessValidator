@@ -6,6 +6,11 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/* This reads chess game files in PGN format
+It splits up multiple games from one file
+It removes extra stuff like comments and variations
+Then it gives us just the moves in a clean format */
+
 public class PgnReader {
     private File file;
 

@@ -1,3 +1,8 @@
+/* This is for the different chess pieces like pawns, knights, etc.
+Each piece knows how to move differently
+I wrote different functions for each piece type to check if their moves are allowed
+Pieces also know if they're white or black */
+
 public class ChessPiece {
     private char type;
     private boolean isWhite;

@@ -1,6 +1,11 @@
 import java.util.ArrayList;
 import java.util.List;
 
+/* This helps change chess notation (like e4 or Nf3) into actual board positions
+It figures out which piece is moving and where it's going
+It handles special notations like castling (O-O) and captures (exd5)
+This was tricky to write because chess notation can be complicated! */
+
 public class MoveParser {
     public static int[] parseMove(String move, ChessBoard board, boolean isWhiteMove) {
         if (move.equals("O-O")) {
